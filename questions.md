@@ -61,8 +61,25 @@
 
 7. Would your answer to number 3 work on Apple's OS X operating system?  If no, do you have any idea why not? 
 
+   __No, because the answer to number 3 depends on the -v "verbose" flag for the /usr/bin/time command, which is a GNU implementation that does not exist on OS X. You would need to use homebrew to install the equivalent GNU command.__
+
 8. Most of the HPC nodes have 512Gb (gigabytes) of RAM. Let's say you have a job that will require **no more** than 24Gb
    of RAM.  How would you request resources so that you can run more than one job on a node **and** not cause nodes to
    crash?  Show an example of a skeleton HPC script as part of your answer.  **Knowing how to do this is super important
    and will save you loads of frustration and prevent you from taking out your colleagues' jobs on the cluster,
    preventing you from getting nasty emails from Harry!!!!!!!!!!!**
+
+
+   ```
+   #!/bin/bash
+   #$ -N TEST
+   #$ -q free*,pub64
+   #$ -pe openmp 8-64
+   #$ -m beas
+   #$ -l mem_size=48G
+   
+   qsub coolscript1.sh
+   qsub coolscript2.sh
+   ```
+   
+   __You would specify the total memory you would use for the job with ```-l mem_size=48G``` if you were running two 24Gb jobs on the node, increasing by 24gb for every additional job you want to run. Then, just ```qsub 2awesomejobs.sh```.__
